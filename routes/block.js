@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var pnoDb = require('../public/models/mongo.js')
 var CryptoBlock = require('../public/models/block.js');
 var CryptoBlockchain = require('../public/models/chain.js');
+const { check, validationResult } = require('express-validator');
 
 const BlockChain = new CryptoBlockchain();
 
@@ -20,10 +20,17 @@ router.get('/validate', async function(req, res, next) {
   });
 });
 
-router.post('/register', async function(req, res, next) {
-  await BlockChain.addNewBlock(new CryptoBlock(0, new Date(), '39711140150'));
-  res.status(201);
-  res.send();
+router.post('/register', [
+  check('data').isLength({ min: 11, max: 11}).isNumeric(),
+], async function(req, res, next) {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).send();
+  } else {
+    await BlockChain.addNewBlock(new CryptoBlock(0, new Date(), req.body.data));
+    res.status(201);
+    res.send();
+  }
 })
 
 module.exports = router;
