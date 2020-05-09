@@ -82,5 +82,23 @@ module.exports = class CryptoBlockchain{
     }).catch(err => {
       reject(false);
     })
-}
+  }
+  async checkIfCointainsData(data) {
+    let database = null;
+    return pnoDb.open()
+    .then((db)=>{
+        database = db;
+        return db.db('pno').collection('pno')    
+    })
+    .then((pno)=>{
+        return pno.findOne({data: SHA256(data).toString()});
+    })
+    .then((result)=>{
+        database.close();
+        return result;
+    })
+    .catch((err)=>{
+      console.error(err);
+    })
+  }
 }

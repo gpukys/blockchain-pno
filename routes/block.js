@@ -11,7 +11,7 @@ router.get('/latest', async function(req, res, next) {
   res.json(latestBlock);
 })
 
-router.get('/validate', async function(req, res, next) {
+router.post('/validate', async function(req, res, next) {
   await BlockChain.checkChainValidity().then(e => {
     res.send();
   }).catch(err => {
@@ -30,6 +30,19 @@ router.post('/register', [
     await BlockChain.addNewBlock(new CryptoBlock(0, new Date(), req.body.data));
     res.status(201);
     res.send();
+  }
+})
+
+router.get('/check/:pno', async function(req, res, next) {
+  if (req.params.pno) {
+    const result = await BlockChain.checkIfCointainsData(req.params.pno);
+    if (result) {
+      res.status(200).send()
+    } else {
+      res.status(404).send();
+    }
+  } else {
+    res.status(404).send();
   }
 })
 
