@@ -1,6 +1,7 @@
 var mongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://admin:admin@cluster0-rsy4j.mongodb.net/test?retryWrites=true&w=majority";
 
+
 function open(){
   // Connection URL. This is where your mongodb server is running.
   return new Promise((resolve, reject)=>{
@@ -23,6 +24,7 @@ function close(db){
 }
 
 let db = {
+  collectionName: undefined,
   open : open,
   close: close
 }

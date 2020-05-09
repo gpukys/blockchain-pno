@@ -10,7 +10,7 @@ module.exports = class CryptoBlockchain{
     return pnoDb.open()
     .then((db)=>{
         database = db;
-        return db.db('pno').collection('pno')    
+        return db.db('pno').collection(pnoDb.collectionName)    
     })
     .then((pno)=>{
         return pno.findOne({}, {sort:{$natural:-1}});
@@ -32,7 +32,7 @@ module.exports = class CryptoBlockchain{
       return pnoDb.open()
       .then((db)=>{
           database = db;
-          return db.db('pno').collection('pno')    
+          return db.db('pno').collection(pnoDb.collectionName)    
       })
       .then((pno)=>{
           return pno.insertOne(newBlock);
@@ -50,7 +50,7 @@ module.exports = class CryptoBlockchain{
     return pnoDb.open()
     .then((db)=>{
         database = db;
-        return db.db('pno').collection('pno')    
+        return db.db('pno').collection(pnoDb.collectionName)    
     })
     .then((pno)=>{
         return pno.find({});
@@ -88,7 +88,7 @@ module.exports = class CryptoBlockchain{
     return pnoDb.open()
     .then((db)=>{
         database = db;
-        return db.db('pno').collection('pno')    
+        return db.db('pno').collection(pnoDb.collectionName)    
     })
     .then((pno)=>{
         return pno.findOne({data: SHA256(data).toString()});
