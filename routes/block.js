@@ -2,7 +2,9 @@ var express = require('express');
 var router = express.Router();
 var CryptoBlock = require('../public/models/block.js');
 var CryptoBlockchain = require('../public/models/chain.js');
+var pnoDb = require('../public/models/mongo.js');
 const { check, validationResult } = require('express-validator');
+const SHA256 = require('crypto-js/sha256');
 
 const BlockChain = new CryptoBlockchain();
 
@@ -19,6 +21,26 @@ router.post('/validate', async function(req, res, next) {
     res.send('The blockchain is invalid');
   });
 });
+
+router.delete('/delete/:pno', function(req, res, next) {
+  let database = null;
+      return pnoDb.open()
+      .then((db)=>{
+          database = db;
+          return db.db('pno').collection('pno')    
+      })
+      .then((pno)=>{
+          return pno.deleteOne({data: SHA256(req.params.pno).toString()});
+      })
+      .then((result)=>{
+          database.close();
+          res.send();
+          return result;
+      })
+      .catch((err)=>{
+        res.status(500).send();
+      })
+})
 
 router.post('/register', [
   check('data').isLength({ min: 11, max: 11}).isNumeric(),
