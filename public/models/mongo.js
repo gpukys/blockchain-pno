@@ -1,5 +1,5 @@
 var mongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://admin:admin@cluster0-rsy4j.mongodb.net/test?retryWrites=true&w=majority";
+const uri = "mongodb://127.0.0.1:27017/?compressors=zlib&gssapiServiceName=mongodb";
 
 
 function open(){
